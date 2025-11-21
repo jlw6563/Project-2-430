@@ -34,16 +34,19 @@ const AccountSchema = new mongoose.Schema({
     required: true,
   },
   followers: {
-    type: Array[String],
-    required: true,
+    type: Array[mongoose.Schema.ObjectId],
+    default: [],
   },
   following: {
-    type: Array[String],
-    required: true,
+    type: Array[mongoose.Schema.ObjectId],
+    default: [],
   },
   verifed: {
     type: Boolean,
     required: true,
+  },
+  company: {
+    type: String,
   },
   createdDate: {
     type: Date,

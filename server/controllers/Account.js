@@ -28,14 +28,20 @@ const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
+  const creditCard = `${req.body.creditCard}`;
+  const company = `${req.body.company}`
+  const verified = creditCard === "123" ? true : false; //The user can only be verified if they enter a "valid" credit card "123"
+
+  console.log(creditCard); //For testing purpouses need to know what that value is
 
   if (!username || !pass || !pass2) { return res.status(400).json({ error: 'All fields are required' }); }
 
   if (pass !== pass2) { return res.status(400).json({ error: 'Passwords do not match!' }); }
+  
 
   try {
     const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash });
+    const newAccount = new Account({ username, password: hash, verified, company });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
     return res.json({ redirect: '/maker' });
@@ -76,6 +82,8 @@ const changePass = (req, res) => {
     }
   });
 };
+
+
 
 module.exports = {
   loginPage,
