@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
-const AccountModel = require('./Account');
 
-let postModel = {};
+let PostModel = {};
 
 
 const PostSchema = new mongoose.Schema({
@@ -14,13 +13,11 @@ const PostSchema = new mongoose.Schema({
         required: true,
         ref: 'Account',
     },
-    news: {
-        type: Boolean,
-        required: true,
-    }
-
     createdDate: {
-    type: Date,
-    default: Date.now,
+        type: Date,
+        default: Date.now,
     },
 });
+
+PostModel = mongoose.model('Post', PostSchema);
+module.exports = PostModel;

@@ -45,9 +45,6 @@ const AccountSchema = new mongoose.Schema({
     type: Boolean,
     required: true,
   },
-  company: {
-    type: String,
-  },
   createdDate: {
     type: Date,
     default: Date.now,

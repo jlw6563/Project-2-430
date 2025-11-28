@@ -2,13 +2,16 @@ const models = require('../models');
 
 const { Account } = models;
 
+//This is good
 const loginPage = (req, res) => res.render('login');
 
+//This is good
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
 };
 
+//This is not done
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -20,16 +23,16 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/maker' }); //Need to change this
   });
 };
 
+//This is not done
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
   const creditCard = `${req.body.creditCard}`;
-  const company = `${req.body.company}`
   const verified = creditCard === "123" ? true : false; //The user can only be verified if they enter a "valid" credit card "123"
 
   console.log(creditCard); //For testing purpouses need to know what that value is
@@ -37,14 +40,14 @@ const signup = async (req, res) => {
   if (!username || !pass || !pass2) { return res.status(400).json({ error: 'All fields are required' }); }
 
   if (pass !== pass2) { return res.status(400).json({ error: 'Passwords do not match!' }); }
-  
+
 
   try {
     const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash, verified, company });
+    const newAccount = new Account({ username, password: hash, verified });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/maker' }); //Need to change this
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -54,6 +57,7 @@ const signup = async (req, res) => {
   }
 };
 
+//This is not done
 const changePass = (req, res) => {
   const username = `${req.body.username}`;
   const oldPass = `${req.body.oldPass}`;
@@ -75,7 +79,7 @@ const changePass = (req, res) => {
         { new: true },
       );
       req.session.account = Account.toAPI(updated);
-      return res.json({ redirect: '/maker' });
+      return res.json({ redirect: '/maker' }); //Need to redirect somewhere else
     } catch (er) {
       console.log(er);
       return res.status(500).json({ error: 'An error occured!' });
