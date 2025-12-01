@@ -34,14 +34,14 @@ const AccountSchema = new mongoose.Schema({
     required: true,
   },
   followers: {
-    type: Array[mongoose.Schema.ObjectId],
+    type: [mongoose.Schema.ObjectId],
     default: [],
   },
   following: {
-    type: Array[mongoose.Schema.ObjectId],
+    type: [mongoose.Schema.ObjectId],
     default: [],
   },
-  verifed: {
+  verified: {
     type: Boolean,
     required: true,
   },

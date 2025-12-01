@@ -11,7 +11,7 @@ const logout = (req, res) => {
   res.redirect('/');
 };
 
-//This is not done
+//This is done
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -23,19 +23,17 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' }); //Need to change this
+    return res.json({ redirect: '/feed' });
   });
 };
 
-//This is not done
+
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
   const creditCard = `${req.body.creditCard}`;
   const verified = creditCard === "123" ? true : false; //The user can only be verified if they enter a "valid" credit card "123"
-
-  console.log(creditCard); //For testing purpouses need to know what that value is
 
   if (!username || !pass || !pass2) { return res.status(400).json({ error: 'All fields are required' }); }
 
@@ -47,7 +45,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash, verified });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' }); //Need to change this
+    return res.json({ redirect: '/feed' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {

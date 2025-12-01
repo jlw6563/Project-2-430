@@ -27,6 +27,7 @@ const handleSignup = (e) => {
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
+    const creditCard = e.target.querySelector('#creditCard').value;
 
     if(!username || !pass || !pass2){
         helper.handleError('Username or password is empty!');
@@ -38,7 +39,7 @@ const handleSignup = (e) => {
         return false;
     }
 
-    helper.sendPost(e.target.action, {username, pass, pass2});
+    helper.sendPost(e.target.action, {username, pass, pass2, creditCard});
 
     return false;
 
@@ -101,8 +102,8 @@ const SignupWindow = (props) => {
             <label htmlFor="pass2">Password:</label>
             <input type="password" name="pass2" id="pass2" placeholder="retype password"/>
             <label htmlFor='creditCard'>Enter credit card details:</label>
-            <input type='password' name="creditCard" id='creditCard' placeholder='This is where you enter credit cards anything other than 123 will give incorrect credit card'></input>
-            <input type="submit" className='formSubmit' value="Sign in" />
+            <input type='text' name="creditCard" id='creditCard' placeholder='This is where you enter credit cards anything other than 123 will give incorrect credit card'></input>
+            <input type="submit" className='formSubmit' value="Sign up" />
         </form>
     );
 }
