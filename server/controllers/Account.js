@@ -2,16 +2,16 @@ const models = require('../models');
 
 const { Account } = models;
 
-//This is good
+// This is good
 const loginPage = (req, res) => res.render('login');
 
-//This is good
+// This is good
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');
 };
 
-//This is done
+// This is done
 const login = (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
@@ -27,18 +27,16 @@ const login = (req, res) => {
   });
 };
 
-
 const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
   const creditCard = `${req.body.creditCard}`;
-  const verified = creditCard === "123" ? true : false; //The user can only be verified if they enter a "valid" credit card "123"
+  const verified = creditCard === '123'; // The user can only be verified if they enter a "valid" credit card "123"
 
   if (!username || !pass || !pass2) { return res.status(400).json({ error: 'All fields are required' }); }
 
   if (pass !== pass2) { return res.status(400).json({ error: 'Passwords do not match!' }); }
-
 
   try {
     const hash = await Account.generateHash(pass);
@@ -55,7 +53,7 @@ const signup = async (req, res) => {
   }
 };
 
-//This is not done
+// This is not done
 const changePass = (req, res) => {
   const username = `${req.body.username}`;
   const oldPass = `${req.body.oldPass}`;
@@ -77,15 +75,13 @@ const changePass = (req, res) => {
         { new: true },
       );
       req.session.account = Account.toAPI(updated);
-      return res.json({ redirect: '/maker' }); //Need to redirect somewhere else
+      return res.json({ redirect: '/maker' }); // Need to redirect somewhere else
     } catch (er) {
       console.log(er);
       return res.status(500).json({ error: 'An error occured!' });
     }
   });
 };
-
-
 
 module.exports = {
   loginPage,

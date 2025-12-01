@@ -3,56 +3,50 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
-const handleDomo = (e, onDomoAdded) => {
+const handlePost = (e, onPostAdded) => {
     e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const personality = e.target.querySelector('#domoPersonality').value;
+    const text = e.target.querySelector('#postText').value;
+    
 
-    if(!name || !age || !personality) {
+    if(!text) {
         helper.handleError('All fields are required');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, personality}, onDomoAdded);
+    helper.sendPost(e.target.action, {text}, onPostAdded);
     return false;
 }
 
-const DomoForm = (props) => {
+const PostForm = (props) => {
     return (
-    <form id="domoForm"
-        onSubmit={(e) => handleDomo(e,props.triggerReload)}
-        name='domoForm'
-        action='/maker'
+    <form id="postForm"
+        onSubmit={(e) => handlePost(e,props.triggerReload)}
+        name='postForm'
+        action='/makePost'
         method='POST'
-        className='domoForm'
     >
-        <label htmlFor="name">Name: </label>
-        <input type="text" name="name" id="domoName" placeholder='Domo Name'/>
-        <label htmlFor="age">Age: </label>
-        <input type="number" name="age" id="domoAge" min='0'/>
-        <label htmlFor="personality">Personality: </label>
-        <input type="text" name="personality" id="domoPersonality" placeholder='Domo Personality'/>
-        <input type="submit" value="Make Domo" className='makeDomoSubmit'/>
+        <label htmlFor="name">Text: </label>
+        <input type="text" name="name" id="postText" placeholder='Post text'/>
+        <input type="submit" value="Create Post" />
     </form>
     );
 };
 
-const DomoList = (props) => {
-    const [domos, setDomos] = useState(props.domos);
+const PostsDisplay = (props) => {
+    const [posts, getPosts] = useState(props.posts);
 
     useEffect(() => {
-        const loadDomosFromServer = async () => {
-            const response = await fetch('/getDomos');
+        const loadPostsFromServer = async () => {
+            const response = await fetch('/getPosts');
             const data = await response.json();
-            setDomos(data.domos);
+            getPosts(data.posts);
         };
-        loadDomosFromServer();
-    }, [props.reloadDomos]);
+        loadPostsFromServer();
+    }, [props.reloadPosts]);
 
-    if(domos.length === 0){
+    if(posts.length === 0){
         return (
             <div className='domoList'>
                 <h3 className='emptyDomo'>No Domos Yet!</h3>
@@ -60,34 +54,32 @@ const DomoList = (props) => {
         );
     };
 
-    const domoNodes = domos.map(domo => {
+    const postNodes = posts.map(post => {
         return (
-            <div className="domo" key={domo.id}>
-                <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3>Personality: {domo.personality}</h3>
+            <div  key={post.id}>
+                <h3 >{post.owner.username}</h3>
+                <p>{post.text}</p>
             </div>
         );
     });
 
     return (
         <div className="domoList">
-            {domoNodes}
+            {postNodes}
         </div>
     );
 };
 
 const App = () => {
-    const [reloadDomos, setReloadDomos] = useState(false);
+    const [reloadPosts, setReloadPosts] = useState(false);
 
     return (
         <div>
-            <div id="makeDomo">
-                <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)}/>
+            <div id="makePost">
+                <PostForm triggerReload={() => setReloadPosts(!reloadPosts)}/>
             </div>
             <div id="domos">
-                <DomoList domos={[]} reloadDomos={reloadDomos}/>
+                <PostsDisplay posts={[]} reloadPosts={reloadPosts}/>
             </div>
         </div>
     );
