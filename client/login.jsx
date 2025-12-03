@@ -102,7 +102,7 @@ const SignupWindow = (props) => {
             <label htmlFor="pass2">Password:</label>
             <input type="password" name="pass2" id="pass2" placeholder="retype password"/>
             <label htmlFor='creditCard'>Enter credit card details:</label>
-            <input type='text' name="creditCard" id='creditCard' placeholder='This is where you enter credit cards anything other than 123 will give incorrect credit card'></input>
+            <input type='checkbox' name="creditCard" id='creditCard'></input>
             <input type="submit" className='formSubmit' value="Sign up" />
         </form>
     );
