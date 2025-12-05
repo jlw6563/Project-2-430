@@ -35,7 +35,7 @@ const getPosts = async (req, res) => {
   try {
     const docs = await Post.find({})
       .sort({ createdDate: -1 }) // Get the newest post
-      .populate('owner', 'username') // Will take the Owner aspect and return it as the username instead https://www.geeksforgeeks.org/mongodb/mongoose-populate-method/
+      .populate('owner') // Will take the Owner aspect and return it as the username instead https://www.geeksforgeeks.org/mongodb/mongoose-populate-method/
       .lean()
       .exec();
     return res.json({ posts: docs });

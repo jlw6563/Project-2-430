@@ -27,7 +27,7 @@ const handleSignup = (e) => {
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
     const pass2 = e.target.querySelector('#pass2').value;
-    const creditCard = e.target.querySelector('#creditCard').value;
+    const creditCard = e.target.querySelector('#creditCard').checked;
 
     if(!username || !pass || !pass2){
         helper.handleError('Username or password is empty!');

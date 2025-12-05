@@ -54,9 +54,9 @@ const VerifiedIcon = (props) => {
 const PostObject = (props) => {
         return (
             <div  key={props.post.id}>
-                <h3 >{props.post.owner.username}</h3>
+                <h3 >{props.post.owner.username} <span><VerifiedIcon verified={props.post.owner.verified}/></span></h3>
                 <p>{props.post.text}</p>
-                <span><VerifiedIcon verified={props.post.owner.verified}/></span>
+                
             </div>
         );
     }
