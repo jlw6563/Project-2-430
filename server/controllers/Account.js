@@ -31,7 +31,9 @@ const signup = async (req, res) => {
   const username = `${req.body.username}`;
   const pass = `${req.body.pass}`;
   const pass2 = `${req.body.pass2}`;
-  const verified = req.body.creditCard; // The user can only be verified if they enter a "valid" credit card "123"
+
+  // The user can only be verified if they enter a "valid" credit card "123"
+  const verified = req.body.creditCard;
 
   if (!username || !pass || !pass2) { return res.status(400).json({ error: 'All fields are required' }); }
 
