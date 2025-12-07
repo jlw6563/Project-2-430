@@ -33,12 +33,23 @@ const makePost = async (req, res) => {
 // Need to rework this for followers
 const getPosts = async (req, res) => {
   try {
-    const docs = await Post.find({})
-      .sort({ createdDate: -1 }) // Get the newest post
-      .populate('owner') // Will take the Owner aspect and return it as the username instead https://www.geeksforgeeks.org/mongodb/mongoose-populate-method/
-      .lean()
-      .exec();
-    return res.json({ posts: docs });
+    const account = await models.Account.findOne({ username: req.session.account.username }).lean().exec();
+    let posts = await models.Post.aggregate([
+      {$sort : {createdDate: -1}},
+      {
+        $project:
+        {
+          text: 1,
+          owner: 1,
+          following: {
+            $in: ['$owner', account.following],
+          },
+        },
+      },
+    ]);
+
+    
+    return res.json({ posts: models.Account.populate(posts, "owner") });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving posts!' });

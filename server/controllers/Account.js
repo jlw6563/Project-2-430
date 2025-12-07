@@ -57,7 +57,7 @@ const signup = async (req, res) => {
 const followAccount = async (req, res) => {
   try {
     const currentUser = await Account.find({ username: req.session.account.username });
-    currentUser.following.push(req.body.id);
+    currentUser.following.push(req.body._id);
     await currentUser.save();
     return res.status(204).json(currentUser);
   } catch (err) {

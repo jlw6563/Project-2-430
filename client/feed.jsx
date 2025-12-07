@@ -37,6 +37,28 @@ const PostForm = (props) => {
 
 
 const FollowButtons = (props) => {
+    if(props.following){
+        return ( <form id="unfollow"
+        name=""
+        onSubmit={(e) => {
+
+        }}
+        action="/unFollow"
+        method="POST">
+            <input type="submit" className='formSubmit' value="Unfollow" />
+        </form>);
+    }
+    else {
+        return ( <form id="follow"
+        name=""
+        onSubmit={(e) => {
+            
+        }}
+        action="/follow"
+        method="POST">
+            <input type="submit" className='formSubmit' value="Unfollow" />
+        </form>); 
+    }
 }
 
 const VerifiedIcon = (props) => {
@@ -54,7 +76,7 @@ const VerifiedIcon = (props) => {
 const PostObject = (props) => {
         return (
             <div  key={props.post.id}>
-                <h3 >{props.post.owner.username} <span><VerifiedIcon verified={props.post.owner.verified}/></span> </h3>
+                <h3 >{props.post.owner.username} <span><VerifiedIcon verified={props.post.owner.verified}/></span> <span><FollowButtons following={props.post.following}/></span> </h3>
                 <p>{props.post.text}</p>
                 
             </div>
@@ -83,7 +105,7 @@ const PostsDisplay = (props) => {
 
     
 
-    const postNodes = posts.map(post => 
+    const postNodes = posts.map(post =>
         <PostObject post={post} />
     );
 
