@@ -13,6 +13,7 @@ const router = (app) => {
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
   app.get('/feed', mid.requiresLogin, controllers.Post.Feed);
   app.post('/makePost', mid.requiresLogin, controllers.Post.makePost);
+  app.post('/follow', mid.requiresLogin, controllers.Account.followAccount);
 
   // app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   // app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);

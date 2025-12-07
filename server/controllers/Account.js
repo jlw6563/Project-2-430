@@ -54,7 +54,18 @@ const signup = async (req, res) => {
   }
 };
 
-// This is not done
+const followAccount = async (req, res) => {
+  try {
+    const currentUser = await Account.find({ username: req.session.account.username });
+    currentUser.following.push(req.body.id);
+    await currentUser.save();
+    return res.status(204).json(currentUser);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured!' });
+  }
+};
+
 const changePass = (req, res) => {
   const username = `${req.body.username}`;
   const oldPass = `${req.body.oldPass}`;
@@ -76,7 +87,7 @@ const changePass = (req, res) => {
         { new: true },
       );
       req.session.account = Account.toAPI(updated);
-      return res.json({ redirect: '/maker' }); // Need to redirect somewhere else
+      return res.json({ redirect: '/feed' });
     } catch (er) {
       console.log(er);
       return res.status(500).json({ error: 'An error occured!' });
@@ -90,4 +101,5 @@ module.exports = {
   logout,
   signup,
   changePass,
+  followAccount,
 };
