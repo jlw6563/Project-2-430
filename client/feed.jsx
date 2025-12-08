@@ -28,7 +28,7 @@ const PostForm = (props) => {
         action='/makePost'
         method='POST'
     >
-        <label htmlFor="name">Text: </label>
+        
         <input type="text" name="name" id="postText" placeholder='Post text'/>
         <input type="submit" value="Create Post" />
     </form>
@@ -122,8 +122,8 @@ const PostsDisplay = (props) => {
 
     if(posts.length === 0){
         return (
-            <div className='domoList'>
-                <h3 className='emptyDomo'>No Posts Yet!</h3>
+            <div>
+                <h3>No Posts Yet!</h3>
             </div>
         );
     };
@@ -135,7 +135,7 @@ const PostsDisplay = (props) => {
     );
 
     return (
-        <div className="domoList">
+        <div>
             {postNodes}
         </div>
     );
@@ -146,10 +146,10 @@ const App = () => {
 
     return (
         <div>
-            <div id="makePost">
+            <div id="makePost" className='row'>
                 <PostForm triggerReload={() => setReloadPosts(!reloadPosts)}/>
             </div>
-            <div id="domos">
+            <div className='rows'>
                 <PostsDisplay posts={[]} reloadPosts={reloadPosts}/>
             </div>
         </div>

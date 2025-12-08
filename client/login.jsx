@@ -93,16 +93,19 @@ const SignupWindow = (props) => {
         name="signupForm"
         onSubmit={handleSignup}
         action="/signup"
-        method="POST"
-        className="mainForm">
+        method="POST">
             <label htmlFor="username">Username:</label>
-            <input id="user" type="text" name="username" placeholder="username"/>
+            <input className="u-full-width" id="user" type="text" name="username" placeholder="username"/>
             <label htmlFor="pass">Password:</label>
             <input type="password" name="pass" id="pass" placeholder="password"/>
             <label htmlFor="pass2">Password:</label>
             <input type="password" name="pass2" id="pass2" placeholder="retype password"/>
-            <label htmlFor='creditCard'>Enter credit card details:</label>
-            <input type='checkbox' name="creditCard" id='creditCard'></input>
+            
+            <label>
+                <input type='checkbox' name="creditCard" id='creditCard'></input>
+                <span className='label-body'>Enter credit card details:</span>
+            </label>
+            
             <input type="submit" className='formSubmit' value="Sign up" />
         </form>
     );
