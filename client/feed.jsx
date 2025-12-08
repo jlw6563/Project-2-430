@@ -40,7 +40,7 @@ const unfollowRequest = (e, post, setFollowState) => {
         helper.hideError();
     
         
-        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(true)});
+        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(false)});
     
         return false;
     
@@ -51,7 +51,7 @@ const followRequest = (e, post, setFollowState) => {
         helper.hideError();
     
 
-        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(false)});
+        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(true)});
 
         return false;
     
@@ -68,7 +68,7 @@ const FollowButtons = (props) => {
             onSubmit={(e) => unfollowRequest(e, props.post, setFollow)}
             action="/unfollow"
             method="POST">
-                <input type="submit" className='formSubmit' value="Unfollow" />
+                <input type="submit"  value="Unfollow"/>
             </form>);
         }
         else {
@@ -77,7 +77,7 @@ const FollowButtons = (props) => {
             onSubmit={(e) => followRequest(e, props.post, setFollow)}
             action="/follow"
             method="POST">
-                <input type="submit" className='formSubmit' value="Follow" />
+                <input type="submit" value="Follow"  />
             </form>); 
         }
     }
