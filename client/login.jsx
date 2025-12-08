@@ -72,18 +72,23 @@ const handleChangePass = (e) => {
 
 const LoginWindow = (props) => {
     return (
-        <form id="loginForm"
-        name="loginForm"
-        onSubmit={handleLogin}
-        action="/login"
-        method="POST"
-        className="mainForm">
-            <label htmlFor="username">Username:</label>
-            <input id="user" type="text" name="username" placeholder="username"/>
-            <label htmlFor="pass">Password:</label>
-            <input type="password" name="pass" id="pass" placeholder="password"/>
-            <input type="submit" className='formSubmit' value="Sign in" />
-        </form>
+                <form id="loginForm"
+                name="loginForm"
+                onSubmit={handleLogin}
+                action="/login"
+                method="POST"
+                className="mainForm">
+                    <label htmlFor="username">Username:</label>
+                    <input className="u-full-width" id="user" type="text" name="username" placeholder="username"/>
+                    <label htmlFor="pass">Password:</label>
+                    <input className="u-full-width" type="password" name="pass" id="pass" placeholder="password"/>
+                    <label/>
+                    <div className='center-box'>
+                    <input  className="" type="submit" value="Sign in" />
+                    </div>
+                    <hr/>
+                </form>
+               
     );
 }
 
@@ -97,17 +102,21 @@ const SignupWindow = (props) => {
             <label htmlFor="username">Username:</label>
             <input className="u-full-width" id="user" type="text" name="username" placeholder="username"/>
             <label htmlFor="pass">Password:</label>
-            <input type="password" name="pass" id="pass" placeholder="password"/>
+            <input className="u-full-width"type="password" name="pass" id="pass" placeholder="password"/>
             <label htmlFor="pass2">Password:</label>
-            <input type="password" name="pass2" id="pass2" placeholder="retype password"/>
+            <input className="u-full-width" type="password" name="pass2" id="pass2" placeholder="retype password"/>
             
             <label>
                 <input type='checkbox' name="creditCard" id='creditCard'></input>
-                <span className='label-body'>Enter credit card details:</span>
+                <span className='label-body'>Select to "enter" credit card details</span>
             </label>
             
-            <input type="submit" className='formSubmit' value="Sign up" />
+            <div className='center-box'>
+                    <input  className="" type="submit" value="Sign up" />
+                    </div>
+            <hr/>
         </form>
+        
     );
 }
 
@@ -120,14 +129,17 @@ const ChangePassWindow = (props) => {
         method="POST"
         className="mainForm">
             <label htmlFor="username">Username:</label>
-            <input id="user" type="text" name="username" placeholder="username"/>
+            <input className="u-full-width" id="user" type="text" name="username" placeholder="username"/>
             <label htmlFor="oldPass">Old Password:</label>
-            <input type="password" name="oldPass" id="oldPass" placeholder="old password"/>
+            <input className="u-full-width" type="password" name="oldPass" id="oldPass" placeholder="old password"/>
             <label htmlFor="pass">Password:</label>
-            <input type="password" name="pass" id="pass" placeholder="password"/>
+            <input className="u-full-width" type="password" name="pass" id="pass" placeholder="password"/>
             <label htmlFor="pass2">Password:</label>
-            <input type="password" name="pass2" id="pass2" placeholder="retype password"/>
-            <input type="submit" className='formSubmit' value="Sign in" />
+            <input className="u-full-width" type="password" name="pass2" id="pass2" placeholder="retype password"/>
+            <label/>
+            <div className='center-box'>
+                    <input  className="" type="submit" value="Change password" />
+                    </div>
         </form>
     );
 }
