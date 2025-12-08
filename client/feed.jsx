@@ -35,29 +35,51 @@ const PostForm = (props) => {
     );
 };
 
+const unfollowRequest = (e, post, setFollowState) => {
+        e.preventDefault();
+        helper.hideError();
+    
+        
+        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(true)});
+    
+        return false;
+    
+}
+
+const followRequest = (e, post, setFollowState) => {
+        e.preventDefault();
+        helper.hideError();
+    
+
+        helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(false)});
+
+        return false;
+    
+}
+
 
 const FollowButtons = (props) => {
-    if(props.following){
-        return ( <form id="unfollow"
-        name=""
-        onSubmit={(e) => {
+    if(props.post.owns === false){
+        const [followState, setFollow] = useState(props.post.following);
 
-        }}
-        action="/unFollow"
-        method="POST">
-            <input type="submit" className='formSubmit' value="Unfollow" />
-        </form>);
-    }
-    else {
-        return ( <form id="follow"
-        name=""
-        onSubmit={(e) => {
-            
-        }}
-        action="/follow"
-        method="POST">
-            <input type="submit" className='formSubmit' value="Unfollow" />
-        </form>); 
+        if(followState){
+            return ( <form id="unfollow"
+            name=""
+            onSubmit={(e) => unfollowRequest(e, props.post, setFollow)}
+            action="/unfollow"
+            method="POST">
+                <input type="submit" className='formSubmit' value="Unfollow" />
+            </form>);
+        }
+        else {
+            return ( <form id="follow"
+            name=""
+            onSubmit={(e) => followRequest(e, props.post, setFollow)}
+            action="/follow"
+            method="POST">
+                <input type="submit" className='formSubmit' value="Follow" />
+            </form>); 
+        }
     }
 }
 
@@ -76,7 +98,10 @@ const VerifiedIcon = (props) => {
 const PostObject = (props) => {
         return (
             <div  key={props.post.id}>
-                <h3 >{props.post.owner.username} <span><VerifiedIcon verified={props.post.owner.verified}/></span> <span><FollowButtons following={props.post.following}/></span> </h3>
+                <h3 >{props.post.username} <span><VerifiedIcon verified={props.post.verified}/></span> 
+                <span><FollowButtons post={props.post}/></span> </h3>
+
+
                 <p>{props.post.text}</p>
                 
             </div>

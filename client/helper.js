@@ -19,6 +19,10 @@ const sendPost = async (url, data, handler) => {
         body: JSON.stringify(data),
     });
 
+    if (response.status === 204) {
+        if (handler) handler();
+        return;
+    }
     const result = await response.json();
     document.getElementById('domoMessage').classList.add('hidden');
 

@@ -54,12 +54,27 @@ const signup = async (req, res) => {
   }
 };
 
+const unfollowAccount = async (req, res) => {
+  try {
+    await Account.updateOne(
+      { _id: req.session.account._id },
+      { $pull: { following: req.body.accountFollow } }
+    )
+    return res.status(204).end();
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'An error occured!' });
+  }
+};
+
 const followAccount = async (req, res) => {
   try {
-    const currentUser = await Account.find({ username: req.session.account.username });
-    currentUser.following.push(req.body._id);
+    const currentUser = await Account.findOne({ username: req.session.account.username }).exec();
+    //console.log(currentUser);
+    console.log(req.body.accountFollow);
+    currentUser.following.push(req.body.accountFollow);
     await currentUser.save();
-    return res.status(204).json(currentUser);
+    return res.status(204).end();
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'An error occured!' });
@@ -102,4 +117,5 @@ module.exports = {
   signup,
   changePass,
   followAccount,
+  unfollowAccount,
 };

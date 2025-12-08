@@ -33,10 +33,6 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  followers: {
-    type: [mongoose.Schema.ObjectId],
-    default: [],
-  },
   following: {
     type: [mongoose.Schema.ObjectId],
     default: [],

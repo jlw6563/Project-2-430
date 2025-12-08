@@ -14,6 +14,7 @@ const router = (app) => {
   app.get('/feed', mid.requiresLogin, controllers.Post.Feed);
   app.post('/makePost', mid.requiresLogin, controllers.Post.makePost);
   app.post('/follow', mid.requiresLogin, controllers.Account.followAccount);
+  app.post('/unfollow', mid.requiresLogin, controllers.Account.unfollowAccount);
 
   // app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
   // app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);

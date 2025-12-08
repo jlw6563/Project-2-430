@@ -35,21 +35,38 @@ const getPosts = async (req, res) => {
   try {
     const account = await models.Account.findOne({ username: req.session.account.username }).lean().exec();
     let posts = await models.Post.aggregate([
-      {$sort : {createdDate: -1}},
+      { $sort: { createdDate: -1 } },
+      {
+        $lookup: {
+          from: 'accounts',
+          localField: 'owner',
+          foreignField: '_id',
+          as: 'owner',
+        },
+      },
+      { $unwind: '$owner' },
+
       {
         $project:
         {
           text: 1,
-          owner: 1,
+          username: "$owner.username",
+          verified: "$owner.verified",
+          ownerId: "$owner._id",
           following: {
-            $in: ['$owner', account.following],
+            $in: ['$owner._id', account.following],
           },
+          owns: {
+            $eq: ["$owner._id", account._id],
+          }
         },
       },
     ]);
 
-    
-    return res.json({ posts: models.Account.populate(posts, "owner") });
+
+
+
+    return res.json({ posts });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving posts!' });
