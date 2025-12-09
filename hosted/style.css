@@ -4,7 +4,18 @@
 
 .center-box {
   display: flex;
-   justify-content: center; /* horizontal */
-  /*align-items: center;       vertical */
-  min-height: 100vh;        /* full screen height */
+   justify-content: center;
+}
+
+.post-card {
+    padding: 1.4rem 1.6rem;
+    border: 1px solid #e1e1e1;
+    border-radius: 6px;
+    background: #ffffff;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+    margin-bottom: 1.2em;
+}
+
+.error-text {
+    color: red;
 }

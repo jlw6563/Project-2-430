@@ -3,6 +3,8 @@ const React = require('react');
 const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
+//Handles creating a new post
+//Callback for when a post is created
 const handlePost = (e, onPostAdded) => {
     e.preventDefault();
     helper.hideError();
@@ -15,14 +17,16 @@ const handlePost = (e, onPostAdded) => {
         return false;
     }
 
+    //Makes post request and has a callback
     helper.sendPost(e.target.action, {text}, onPostAdded);
     return false;
 }
 
-
+//React component of the post creation form
 const PostForm = (props) => {
     return (
     <form id="postForm"
+        //Callback from props gets called when the post request completes
         onSubmit={(e) => handlePost(e,props.triggerReload)}
         name='postForm'
         action='/makePost'
@@ -35,33 +39,37 @@ const PostForm = (props) => {
     );
 };
 
+//Handles unfollowing an account
 const unfollowRequest = (e, post, setFollowState) => {
         e.preventDefault();
         helper.hideError();
     
-        
+        //Sends the post request and once it's completed updates following to be false
         helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(false)});
     
         return false;
     
 }
 
+//Handles following an account
 const followRequest = (e, post, setFollowState) => {
         e.preventDefault();
         helper.hideError();
     
-
+        //Similar to unfollow except sets it to true
         helper.sendPost(e.target.action, {accountFollow: post.ownerId}, () => {setFollowState(true)});
 
         return false;
-    
 }
 
-
+//Follow button React componenet
 const FollowButtons = (props) => {
+    //If the user doesn't own the post
     if(props.post.owns === false){
+        //Create following states
         const [followState, setFollow] = useState(props.post.following);
 
+        //Depending on the state renders a follow or unfollow button
         if(followState){
             return ( <form id="unfollow"
             name=""
@@ -83,7 +91,9 @@ const FollowButtons = (props) => {
     }
 }
 
+//Verified icon React component
 const VerifiedIcon = (props) => {
+    //If the account is verified then rednder the icon
     if(props.verified) { 
     return (
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-patch-check" viewBox="0 0 16 16">
@@ -95,25 +105,80 @@ const VerifiedIcon = (props) => {
     else return;
 }
 
+//THe post React component
 const PostObject = (props) => {
         return (
-            <div  key={props.post.id}>
-                <h3 >{props.post.username} <span><VerifiedIcon verified={props.post.verified}/></span> 
-                <span><FollowButtons post={props.post}/></span> </h3>
+            <div  key={props.post.id} className='post-card container'>
+                <div className="row">
+                    <div className="eight columns">
+                        <h3 >{props.post.username}    
+                            <span>  <VerifiedIcon verified={props.post.verified}/></span>
+                             <hr/>
+                        </h3>  
+                    </div>
+                    <div className="four columns">
+                        <FollowButtons post={props.post}/>
+                    </div>
 
-
-                <p>{props.post.text}</p>
+                </div>
+                
+                <div className='row'>
+                    <div className='eight columns offset-by-two'>
+                        <p>{props.post.text}</p>
+                    </div>
+                </div>
                 
             </div>
         );
     }
 
+//React compoenent that contains all the posts
 const PostsDisplay = (props) => {
+    //For handling new posts being created
+    const [posts, getPosts] = useState(props.posts);
+
+    //Makes it so the server is constantly making requests
+    useEffect(() => {
+        //Loads the posts from the server
+        const loadPostsFromServer = async () => {
+            const response = await fetch('/getPosts');
+            const data = await response.json();
+            getPosts(data.posts);
+        };
+        loadPostsFromServer();
+    }, [props.reloadPosts]);
+
+    //If no post return this empty saying there are no posts
+    if(posts.length === 0){
+        return (
+            <div>
+                <h3>No Posts Yet!</h3>
+            </div>
+        );
+    };
+
+    
+    //Array of posts passes them into the post object
+    const postNodes = posts.map(post =>
+        <PostObject post={post} />
+    );
+
+    //Returns the list of post components
+    return (
+        <div>
+            {postNodes}
+        </div>
+    );
+};
+
+//Similar to above component excpet for displaying posts of accounts you follow
+const FollowingPostsDisplay = (props) => {
     const [posts, getPosts] = useState(props.posts);
 
     useEffect(() => {
         const loadPostsFromServer = async () => {
-            const response = await fetch('/getPosts');
+            //Only difference is the request we make
+            const response = await fetch('/getFollowingPosts');
             const data = await response.json();
             getPosts(data.posts);
         };
@@ -141,16 +206,42 @@ const PostsDisplay = (props) => {
     );
 };
 
+//React compoenent that handles which feed should be displayed the following one or the entire one
+const FeedDisplay = (props) => {
+    if(props.tab == "feed"){
+        return (
+            <PostsDisplay posts={props.posts} reloadPosts={props.reloadPosts}/>
+        );
+    }else {
+        return (
+            <FollowingPostsDisplay posts={props.posts} reloadPosts={props.reloadPosts}/>
+        )
+    }
+}
+
 const App = () => {
+    //For handling posts being reloaded
+    //For switching between tabs
     const [reloadPosts, setReloadPosts] = useState(false);
+    const [activeTab, switchTabs] = useState('feed')
 
     return (
-        <div>
-            <div id="makePost" className='row'>
+        <div className='container'>
+            <div className='row center-box'>
+                <button type='button' onClick={() => {switchTabs('following')}}>Following</button>
+                <button type='button' onClick={() => {switchTabs('feed')}}>Feed</button>
+            </div>
+
+            <div id="errorContainer" class='hidden'>
+                <h3 className='error-text'><span id="errorMessage"></span></h3>
+             </div>
+            <div id="makePost" className='row center-box'>
                 <PostForm triggerReload={() => setReloadPosts(!reloadPosts)}/>
             </div>
-            <div className='rows'>
-                <PostsDisplay posts={[]} reloadPosts={reloadPosts}/>
+            <div className='row'>
+                <div className='ten columns offset-by-one'>
+                    <FeedDisplay tab={activeTab} posts={[]} reloadPosts={reloadPosts}/>
+                </div>
             </div>
         </div>
     );
